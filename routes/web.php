@@ -29,6 +29,18 @@ $router->group(['prefix' => 'quickbooks'], function (Router $router) {
 $router->group(
     ['middleware' => 'quickbooks'],
     function (Router $router) {
+
         $router->get('company-info', 'APIController@companyInfo');
+
+        $router->group(
+            ['prefix' => 'customers'],
+            function (Router $router) {
+                $router->get('/', 'CustomerAPIController@index');
+                $router->get('/{id}', 'CustomerAPIController@show');
+                $router->post('/', 'CustomerAPIController@store');
+                $router->put('/{id}', 'CustomerAPIController@update');
+                $router->delete('/{id}', 'CustomerAPIController@delete');
+            }
+        );
     }
 );

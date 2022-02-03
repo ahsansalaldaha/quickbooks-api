@@ -37,3 +37,5 @@ API for fields:
 
 SDK usage:
 [SDK Usage](https://intuit.github.io/QuickBooks-V3-PHP-SDK/quickstart.html#sending-requests)
+
+For Minimum Fields look at v3 Postman SDK

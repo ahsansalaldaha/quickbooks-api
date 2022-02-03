@@ -7,6 +7,7 @@ use Laravel\Lumen\Routing\UrlGenerator;
 use Illuminate\Http\Request;
 use App\Clients\Quickbook as QuickBooks;
 
+
 /**
  * Class Filter
  *
