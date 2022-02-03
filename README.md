@@ -1,24 +1,29 @@
-# Lumen PHP Framework
+# Resourceinn Quickbooks Microservice
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
 [![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+Resourceinn Quickbooks Microservice is a microservice that serves the purpose of connecting to quickbooks
 
-## Official Documentation
+## Steps
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+The first thing you need to do is connect to the quickbooks by hitting url
+Make sure you have passed a header **x-api-key** with pass mentioned in your .env
 
-## Contributing
+```
+{url}/quickbooks/connect
+```
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+this will allow you to to connect with the quickbooks and token will be stored in the quickbooks_tokens table.
 
-## Security Vulnerabilities
+```
+{url}/quickbooks/token
+```
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+it will hit the token url make sure this is properly set in the redirect urls
 
-## License
+```
+https://developer.intuit.com/app/developer/appdetail/test/keys?appId=djQuMTo6OGQzYmJlYTI3Yg:ca4aa4e3-b0e6-431b-a465-40e43712be5d
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Now, for you will be able to access the api by hitting the API urls mentioned in web.php.
