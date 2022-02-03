@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "2.9.6",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9988
+        },
+        {
+            "name": "Docker xDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            // "log": true,
+            "pathMappings": {
+                "/srv": "${workspaceRoot}"
+            },
+            "ignore": ["**/vendor/**/*.php"],
+            "xdebugSettings": {
+                "max_data": 65535,
+                "show_hidden": 1,
+                "max_children": 100,
+                "max_depth": 5
+            }
+        }
+    ]
+}
