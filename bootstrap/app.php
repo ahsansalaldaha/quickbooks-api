@@ -81,6 +81,9 @@ $app->configure('mail');
 $app->middleware([
     App\Http\Middleware\XAPIKeyMiddleware::class
 ]);
+$app->routeMiddleware([
+    'quickbooks' => App\Http\Middleware\QuickbooksAuthMiddleware::class,
+]);
 
 $app->register(Illuminate\Mail\MailServiceProvider::class);
 

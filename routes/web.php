@@ -25,4 +25,10 @@ $router->group(['prefix' => 'quickbooks'], function (Router $router) {
     $router->get('token', ['as' => 'quickbooks.token', 'uses' => 'QuickbookConnectController@token']);
 });
 
-$router->get('company-info', 'APIController@companyInfo');
+
+$router->group(
+    ['middleware' => 'quickbooks'],
+    function (Router $router) {
+        $router->get('company-info', 'APIController@companyInfo');
+    }
+);

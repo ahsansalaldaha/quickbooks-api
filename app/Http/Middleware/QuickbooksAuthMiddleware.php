@@ -3,10 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Contracts\Session\Session;
+use Laravel\Lumen\Routing\UrlGenerator;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use App\Clients\Quickbook as QuickBooks;
 
 /**
@@ -24,20 +22,6 @@ class QuickbooksAuthMiddleware
     protected $quickbooks;
 
     /**
-     * The redirector instance.
-     *
-     * @var Redirector
-     */
-    protected $redirector;
-
-    /**
-     * The session instance.
-     *
-     * @var Session
-     */
-    protected $session;
-
-    /**
      * The UrlGenerator instance.
      *
      * @var UrlGenerator
@@ -48,19 +32,14 @@ class QuickbooksAuthMiddleware
      * Create a new QuickBooks filter middleware instance.
      *
      * @param QuickBooks $quickbooks
-     * @param Redirector $redirector
      * @param Session $session
      * @param UrlGenerator $url_generator
      */
     public function __construct(
         QuickBooks $quickbooks,
-        Redirector $redirector,
-        Session $session,
         UrlGenerator $url_generator
     ) {
         $this->quickbooks = $quickbooks;
-        $this->redirector = $redirector;
-        $this->session = $session;
         $this->url_generator = $url_generator;
     }
 
@@ -76,9 +55,9 @@ class QuickbooksAuthMiddleware
     {
         if (!$this->quickbooks->hasValidRefreshToken()) {
             // Set intended route, so that after linking account, user is put where they were going
-            $this->session->put('url.intended', $this->url_generator->to($request->path()));
+            $request->session()->put('url.intended', $this->url_generator->to($request->path()));
 
-            return $this->redirector->route('quickbooks.connect');
+            return redirect()->route('quickbooks.connect');
         }
 
         return $next($request);

@@ -27,3 +27,13 @@ https://developer.intuit.com/app/developer/appdetail/test/keys?appId=djQuMTo6OGQ
 ```
 
 Now, for you will be able to access the api by hitting the API urls mentioned in web.php.
+
+## Guide to create API
+
+here are the places which you can use to create api
+
+API for fields:
+[API Guide](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customer#create-a-customer)
+
+SDK usage:
+[SDK Usage](https://intuit.github.io/QuickBooks-V3-PHP-SDK/quickstart.html#sending-requests)

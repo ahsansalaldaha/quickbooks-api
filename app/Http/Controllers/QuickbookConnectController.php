@@ -82,6 +82,10 @@ class QuickbookConnectController extends Controller
         // TODO: Deal with exceptions
         $quickbooks->exchangeCodeForToken($request->get('code'), $request->get('realmId'));
 
+        if ($request->session()->has('url.intended')) {
+            return redirect()->to($request->session()->get('url.intended'));
+        }
+
         return "Success, Now you can use the QuickBooks API";
     }
 }
