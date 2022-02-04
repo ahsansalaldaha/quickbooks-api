@@ -83,6 +83,7 @@ $app->middleware([
 ]);
 $app->routeMiddleware([
     'quickbooks' => App\Http\Middleware\QuickbooksAuthMiddleware::class,
+    'logging' => App\Http\Middleware\LoggingMiddleware::class
 ]);
 
 $app->register(Illuminate\Mail\MailServiceProvider::class);

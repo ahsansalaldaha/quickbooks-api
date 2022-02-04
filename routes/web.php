@@ -18,28 +18,33 @@ use Laravel\Lumen\Routing\Router;
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-
-$router->group(['prefix' => 'quickbooks'], function (Router $router) {
-    $router->get('connect', ['as' => 'quickbooks.connect', 'uses' => 'QuickbookConnectController@connect']);
-    $router->delete('disconnect', ['as' => 'quickbooks.disconnect', 'uses' => 'QuickbookConnectController@disconnect']);
-    $router->get('token', ['as' => 'quickbooks.token', 'uses' => 'QuickbookConnectController@token']);
-});
-
-
 $router->group(
-    ['middleware' => 'quickbooks'],
+    ['middleware' => ['logging']],
     function (Router $router) {
 
-        $router->get('company-info', 'APIController@companyInfo');
+        $router->group(['prefix' => 'quickbooks'], function (Router $router) {
+            $router->get('connect', ['as' => 'quickbooks.connect', 'uses' => 'QuickbookConnectController@connect']);
+            $router->delete('disconnect', ['as' => 'quickbooks.disconnect', 'uses' => 'QuickbookConnectController@disconnect']);
+            $router->get('token', ['as' => 'quickbooks.token', 'uses' => 'QuickbookConnectController@token']);
+        });
 
         $router->group(
-            ['prefix' => 'customers'],
+            ['middleware' =>  'quickbooks'],
             function (Router $router) {
-                $router->get('/', 'CustomerAPIController@index');
-                $router->get('/{id}', 'CustomerAPIController@show');
-                $router->post('/', 'CustomerAPIController@store');
-                $router->put('/{id}', 'CustomerAPIController@update');
-                $router->delete('/{id}', 'CustomerAPIController@delete');
+
+                $router->get('company-info', 'APIController@companyInfo');
+
+                // Customer Routes
+                $router->group(
+                    ['prefix' => 'customers'],
+                    function (Router $router) {
+                        $router->get('/', 'CustomerAPIController@index');
+                        $router->get('/{id}', 'CustomerAPIController@show');
+                        $router->post('/', 'CustomerAPIController@store');
+                        $router->put('/{id}', 'CustomerAPIController@update');
+                        $router->delete('/{id}', 'CustomerAPIController@delete');
+                    }
+                );
             }
         );
     }
