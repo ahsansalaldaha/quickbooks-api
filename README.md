@@ -39,3 +39,7 @@ SDK usage:
 [SDK Usage](https://intuit.github.io/QuickBooks-V3-PHP-SDK/quickstart.html#sending-requests)
 
 For Minimum Fields look at v3 Postman SDK
+
+For creating more API's follow the Sample CRUD App
+
+https://github.com/IntuitDeveloper/SampleApp-CRUD-PHP/tree/master/CRUD_Examples
