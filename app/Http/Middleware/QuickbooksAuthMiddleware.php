@@ -60,7 +60,6 @@ class QuickbooksAuthMiddleware
 
             return redirect()->route('quickbooks.connect');
         }
-
         return $next($request);
     }
 }

@@ -3,120 +3,83 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use QuickBooks;
 use QuickBooksOnline\API\Facades\Customer;
+use Illuminate\Support\Facades\Log;
 
 class CustomerAPIController extends Controller
 {
 
-    public function index(Request $request)
+    public function __construct()
     {
-        $quickbooks = app('QuickBooks');
-        $data = $quickbooks->getDataService()->query("SELECT * FROM Customer ");
-        return response()->json($data);
+        $this->qb = app('QuickBooks');
+        $this->qbDataService = $this->qb->getDataService();
+    }
+    public function index()
+    {
+        $data = $this->qbDataService->query("SELECT * FROM Customer ");
+        return $this->qb->handleResponse($this->qbDataService, $data);
     }
 
     public function show($id)
     {
-        $quickbooks = app('QuickBooks');
-        $data = $quickbooks->getDataService()->query("SELECT * FROM Customer WHERE Id = '{$id}'");
+        $data = $this->qbDataService->query("SELECT * FROM Customer WHERE Id = '{$id}'");
+
         return response()->json($data);
     }
 
     public function store(Request $request)
     {
+
         $this->validate($request, [
-            // 'name' => 'required',
-            // 'email' => 'required|email',
-            // 'phone' => 'required',
-            // 'company_name' => '',
-            // 'no_of_employee' => ''
+            'DisplayName' => 'required',
+            'Notes' => 'required',
+            'BillAddr' => 'required',
+            'BillAddr.CountrySubDivisionCode' => 'required',
+            'BillAddr.City' => 'required',
+            'BillAddr.PostalCode' => 'required',
+            'BillAddr.Line1' => 'required',
+            'BillAddr.Country' => 'required',
+            'PrimaryPhone' => 'required',
+            'PrimaryPhone.FreeFormNumber' => 'required',
+            'PrimaryEmailAddr' => 'required',
+            'PrimaryEmailAddr.Address' => 'required|email'
         ]);
 
-        $quickbooks = app('QuickBooks');
-        $customer = Customer::create([
-            "FullyQualifiedName" => "King Groceries",
-            "PrimaryEmailAddr" => [
-                "Address" => "jdrew@myemail.com"
-            ],
-            "DisplayName" => "King's Groceries",
-            "Suffix" => "Jr",
-            "Title" => "Mr",
-            "MiddleName" => "B",
-            "Notes" => "Here are other details.",
-            "FamilyName" => "King",
-            "PrimaryPhone" => [
-                "FreeFormNumber" => "(555) 555-5555"
-            ],
-            "CompanyName" => "King Groceries",
-            "BillAddr" => [
-                "CountrySubDivisionCode" => "CA",
-                "City" => "Mountain View",
-                "PostalCode" => "94042",
-                "Line1" => "123 Main Street",
-                "Country" => "USA"
-            ],
-            "GivenName" => "James"
-        ]);
-        $data = $quickbooks->getDataService()->Add($customer);
-        return response()->json($data);
+        $customer = Customer::create($request->toArray());
+        $data = $this->qbDataService->Add($customer);
+        return $this->qb->handleResponse($this->qbDataService, $data);
     }
 
 
-    function update(Request $request)
+    function update(Request $request, $id)
     {
         $this->validate($request, [
-            // 'name' => 'required',
-            // 'email' => 'required|email',
-            // 'phone' => 'required',
-            // 'company_name' => '',
-            // 'no_of_employee' => ''
+            'DisplayName' => '',
+            'Notes' => '',
+            'BillAddr' => '',
+            'BillAddr.CountrySubDivisionCode' => '',
+            'BillAddr.City' => '',
+            'BillAddr.PostalCode' => '',
+            'BillAddr.Line1' => '',
+            'BillAddr.Country' => '',
+            'PrimaryPhone' => '',
+            'PrimaryPhone.FreeFormNumber' => '',
+            'PrimaryEmailAddr' => '',
+            'PrimaryEmailAddr.Address' => 'email'
         ]);
-
-        $quickbooks = app('QuickBooks');
-        $customer = Customer::create([
-            "FullyQualifiedName" => "King Groceries",
-            "PrimaryEmailAddr" => [
-                "Address" => "jdrew@myemail.com"
-            ],
-            "DisplayName" => "King's Groceries",
-            "Suffix" => "Jr",
-            "Title" => "Mr",
-            "MiddleName" => "B",
-            "Notes" => "Here are other details.",
-            "FamilyName" => "King",
-            "PrimaryPhone" => [
-                "FreeFormNumber" => "(555) 555-5555"
-            ],
-            "CompanyName" => "King Groceries",
-            "BillAddr" => [
-                "CountrySubDivisionCode" => "CA",
-                "City" => "Mountain View",
-                "PostalCode" => "94042",
-                "Line1" => "123 Main Street",
-                "Country" => "USA"
-            ],
-            "GivenName" => "James"
-        ]);
-        $data = $quickbooks->getDataService()->Update($customer);
-        return response()->json($data);
+        $customer = $this->qbDataService->FindbyId('customer', $id);
+        $customerProperties = Customer::update($customer, $request->toArray());
+        $data = $this->qbDataService->Update($customerProperties);
+        return $this->qb->handleResponse($this->qbDataService, $data);
     }
 
-    function delete(Request $request)
+    function delete($id)
     {
-        $this->validate($request, [
-            // 'name' => 'required',
-            // 'email' => 'required|email',
-            // 'phone' => 'required',
-            // 'company_name' => '',
-            // 'no_of_employee' => ''
+        $customer = $this->qbDataService->FindbyId('customer', $id);
+        $customerProperties = Customer::update($customer, [
+            "Active" => false
         ]);
-
-        $quickbooks = app('QuickBooks');
-        $customer = Customer::create([
-            "GivenName" => "James"
-        ]);
-        $data = $quickbooks->getDataService()->Delete($customer);
-        return response()->json($data);
+        $data = $this->qbDataService->Update($customerProperties);
+        return $this->qb->handleResponse($this->qbDataService, $data);
     }
 }

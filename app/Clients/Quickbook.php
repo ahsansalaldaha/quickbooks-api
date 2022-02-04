@@ -291,4 +291,17 @@ class Quickbook
 
         return $this;
     }
+
+    public function handleResponse(DataService $dataService, $response)
+    {
+        $error = $dataService->getLastError();
+        if ($error) {
+            return response()->json([
+                'response_message' => $error->getResponseBody(),
+                'helper_message' => $error->getOAuthHelperError()
+            ], $error->getHttpStatusCode());
+        } else {
+            return response()->json($response);
+        }
+    }
 }

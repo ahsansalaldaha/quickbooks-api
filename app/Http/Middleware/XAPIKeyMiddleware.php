@@ -27,7 +27,7 @@ class XAPIKeyMiddleware
     public function handle($request, Closure $next, $guard = null)
     {
         if ($request->headers->has('x-api-key')) {
-            if ($request->header('x-api-key')===env('X_API_KEY')) {
+            if ($request->header('x-api-key') === env('X_API_KEY')) {
                 return $next($request);
             }
         }
