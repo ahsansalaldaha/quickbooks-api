@@ -45,6 +45,30 @@ $router->group(
                         $router->delete('/{id}', 'CustomerAPIController@delete');
                     }
                 );
+
+                // Invoice Routes
+                $router->group(
+                    ['prefix' => 'invoices'],
+                    function (Router $router) {
+                        $router->get('/', 'InvoiceAPIController@index');
+                        $router->get('/{id}', 'InvoiceAPIController@show');
+                        $router->post('/', 'InvoiceAPIController@store');
+                        $router->put('/{id}', 'InvoiceAPIController@update');
+                        $router->delete('/{id}', 'InvoiceAPIController@delete');
+                    }
+                );
+
+                // Payment Routes
+                $router->group(
+                    ['prefix' => 'payments'],
+                    function (Router $router) {
+                        $router->get('/', 'PaymentAPIController@index');
+                        $router->get('/{id}', 'PaymentAPIController@show');
+                        $router->post('/', 'PaymentAPIController@store');
+                        $router->put('/{id}', 'PaymentAPIController@update');
+                        $router->delete('/{id}', 'PaymentAPIController@delete');
+                    }
+                );
             }
         );
     }
