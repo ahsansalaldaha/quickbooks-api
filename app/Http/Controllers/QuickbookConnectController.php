@@ -47,19 +47,15 @@ class QuickbookConnectController extends Controller
     /**
      * Removes the token
      *
-     * @param Redirector $redirector
      * @param QuickBooks $quickbooks
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      * @throws \Exception
      */
-    public function disconnect(Redirector $redirector, Request $request, QuickBooks $quickbooks)
+    public function disconnect( Request $request, QuickBooks $quickbooks)
     {
         $quickbooks->deleteToken();
-
-        $request->session()->flash('success', 'Disconnected from QuickBooks');
-
-        return $redirector->back();
+        return response()->json("Success, Token QuickBooks API has been removed");
     }
 
     /**
@@ -86,6 +82,6 @@ class QuickbookConnectController extends Controller
             return redirect()->to($request->session()->get('url.intended'));
         }
 
-        return "Success, Now you can use the QuickBooks API";
+        return response()->json("Success, Now you can use the QuickBooks API");
     }
 }

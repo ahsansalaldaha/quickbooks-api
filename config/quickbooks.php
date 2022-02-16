@@ -24,8 +24,8 @@ return [
     'data_service' => [
         'auth_mode'     => 'oauth2',
         'base_url'      => env('QUICKBOOKS_API_URL', config('app.env') === 'production' ? 'Production' : 'Development'),
-        'client_id'     => env('QUICKBOOKS_CLIENT_ID'),
-        'client_secret' => env('QUICKBOOKS_CLIENT_SECRET'),
+        'client_id'     => env((config('app.env') === 'production' ? 'PRODUCTION' : 'LOCAL').'_QUICKBOOKS_CLIENT_ID'),
+        'client_secret' => env((config('app.env') === 'production' ? 'PRODUCTION' : 'LOCAL').'_QUICKBOOKS_CLIENT_SECRET'),
         'scope'         => 'com.intuit.quickbooks.accounting',
     ],
 

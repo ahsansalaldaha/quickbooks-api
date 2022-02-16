@@ -79,6 +79,7 @@ $app->register(\Illuminate\Queue\QueueServiceProvider::class);
 $app->configure('mail');
 
 $app->middleware([
+    Illuminate\Session\Middleware\StartSession::class,
     App\Http\Middleware\XAPIKeyMiddleware::class
 ]);
 $app->routeMiddleware([
@@ -135,6 +136,7 @@ $app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
+$app->register(Illuminate\Session\SessionServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(App\Providers\QuickbookServiceProvider::class);
 $app->register(\Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class);
@@ -142,6 +144,20 @@ $app->register(\Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class
 
 collect(scandir(__DIR__ . '/../config'))->each(function ($item) use ($app) {
     $app->configure(basename($item, '.php'));
+});
+
+
+// Session
+
+// Load session config (otherwise it won't be loaded)
+$app->configure('session');
+
+// Add `SessionServiceProvider`
+
+
+// fix `BindingResolutionException` problem
+$app->bind(Illuminate\Session\SessionManager::class, function ($app) {    
+    return $app->make('session');
 });
 
 /*
